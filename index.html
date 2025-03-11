@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    #landing-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #005EA2; /* GSA blue */
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+    
+    .placeholder-text {
+      background-color: rgba(255, 255, 255, 0.2);
+      height: 30px;
+      margin: 15px 0;
+      width: 70%;
+      border-radius: 4px;
+      transform: scaleX(0);
+    }
+    
+    .title-placeholder {
+      height: 50px;
+      width: 50%;
+    }
+    
+    #dashboard-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      opacity: 0;
+    }
+    
+    .logo {
+      width: 100px;
+      height: 100px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      margin-bottom: 30px;
+      transform: scale(0);
+    }
+  </style>
+</head>
+<body>
+  <div id="landing-overlay">
+    <div class="logo"></div>
+    <div class="placeholder-text title-placeholder"></div>
+    <div class="placeholder-text"></div>
+    <div class="placeholder-text"></div>
+    <div class="placeholder-text"></div>
+  </div>
+  
+  <div id="dashboard-container">
+    <!-- Your existing dashboard content will be loaded here -->
+    <div id="existingDashboard"></div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      // Load your existing dashboard content
+      // Replace this with your actual dashboard loading code
+      $("#existingDashboard").html(<?= JSON.stringify(dashboardHtml) ?>);
+      
+      // Animation sequence using GSAP
+      const tl = gsap.timeline();
+      
+      // Animate logo and text placeholders
+      tl.to(".logo", {duration: 0.8, scale: 1, ease: "back.out(1.7)"})
+        .to(".placeholder-text", {duration: 0.7, scaleX: 1, stagger: 0.2, ease: "power2.out"})
+        .to(".placeholder-text", {
+          duration: 0.5, 
+          backgroundColor: "rgba(255, 255, 255, 0.4)", 
+          repeat: 1, 
+          yoyo: true,
+          delay: 0.5
+        })
+        .to("#dashboard-container", {duration: 0.5, opacity: 1})
+        .to("#landing-overlay", {
+          duration: 1.2, 
+          opacity: 0, 
+          ease: "power2.inOut",
+          onComplete: function() {
+            // Remove the overlay completely after animation
+            $("#landing-overlay").remove();
+          }
+        });
+    });
+  </script>
+</body>
+</html>
